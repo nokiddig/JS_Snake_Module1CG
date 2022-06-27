@@ -1,0 +1,63 @@
+canvas#gamezone {
+   border: 2px solid red; 
+}
+
+.container {
+   
+   justify-content: center;
+   text-align: center;
+   display: grid;
+   grid-template-columns: 600px 300px;
+}
+
+.side-bar {
+   padding: 10px;
+   border: 2px solid red; 
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   margin: 0px 30px;
+}
+ 
+p#level{
+   font-size: 20px;
+   text-decoration: ;
+   position: absolute;
+   left: 115px;
+   top: 250px;
+   right: 
+}
+#upLevelBtn {
+   position: absolute;
+   left: 0px;
+   top: 250px;
+   width: 10px;
+   background-color: coral;
+   font-size: 16px;
+   padding: 10px 20px;
+   margin: 10px;
+   cursor: pointer;
+}
+
+#downLevelBtn {
+   position: absolute;
+   right: 0px;
+   top: 250px;
+   width: 10px;
+   background-color: coral;
+   font-size: 16px;
+   padding: 10px 20px;
+   margin: 10px;
+   cursor: pointer;
+}
+
+
+#exitBtn {
+   background-color: chocolate;
+   font-size: 16px;
+   padding: 15px 30px;
+   cursor: pointer;
+   margin: 5px 10px;
+}
+

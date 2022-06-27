@@ -67,11 +67,10 @@ class snake{
   }
 
   draw(){
-    drawRectOnboard(this.body[0], HEAD_COLOR);
     for (let i=1; i<this.body.length; i++) {
       drawRectOnboard(this.body[i], SNAKE_COLOR);
     }
-    
+    drawRectOnboard(this.body[0], HEAD_COLOR);
   }
 
   size() {
@@ -170,18 +169,33 @@ let food = new Food(new Vector(5,5));
 food.draw();
 
 //vong lap de ran di chuyen moi 200s
-setInterval(() => {
+var myInterval = setInterval(myTimer, gameDelay);
+
+function myTimer() {
   player.move();
   if (player.checkDead()) {
-    //window.location.;
+    clearInterval(myInterval);
   }
   if (player.checkEat(food)) {
     player.update();
     food.getNewFood(player.body);
-    playerScore += curLevel;
+    playerScore += Math.round(curLevel);
     document.getElementById("score").innerHTML = playerScore;
   }
-}, gameDelay);
+}
+
+// setInterval(() => {
+//   player.move();
+//   if (player.checkDead()) {
+//     alert("Thua!");
+//   }
+//   if (player.checkEat(food)) {
+//     player.update();
+//     food.getNewFood(player.body);
+//     playerScore += Math.round(curLevel);
+//     document.getElementById("score").innerHTML = playerScore;
+//   }
+// }, gameDelay);
 
 document.onkeydown = function(e) {
   switch (e.keyCode) {
@@ -220,7 +234,9 @@ document.getElementById('upLevelBtn').onclick = function(){
     document.getElementById('level').innerHTML ++;
     curLevel ++;
   }
-  gameDelay = 400-curLevel*50;
+  gameDelay = 400 - curLevel*50;
+  clearInterval(myInterval);
+  myInterval = setInterval(myTimer, gameDelay);;
 };
 
 document.getElementById('downLevelBtn').onclick = function(){
@@ -228,7 +244,9 @@ document.getElementById('downLevelBtn').onclick = function(){
     document.getElementById('level').innerHTML --;
     curLevel --;
   }
-  gameDelay = 400-curLevel*50;
+  gameDelay = 400 - curLevel*50;
+  clearInterval(myInterval);
+  myInterval = setInterval(myTimer, gameDelay);;
 };
 
 document.getElementById('exitBtn').onclick = function(){

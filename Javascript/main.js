@@ -1,7 +1,7 @@
-const gameSize = 600;
+const GAMESIZE = 600;
 const UNIT = 40;
 const canvas = document.getElementById("canvas");
-canvas.width = canvas.height = gameSize;
+canvas.width = canvas.height = GAMESIZE;
 const ctx = canvas.getContext('2d');
 
 const BACKGROUND_COLOR = 'black';
@@ -9,9 +9,7 @@ const SNAKE_COLOR = 'orange'
 const HEAD_COLOR = 'red';
 const FOOD_COLOR = 'blue'
 
-var curLevel = document.getElementById("level").innerHTML;
 var maxLevel = 7, minLevel = 1;
-var gameDelay = 400-curLevel*50;
 
 let LEFT = 37,
     UP = 38,
@@ -87,7 +85,7 @@ class snake{
   }
 
   update() {
-    //an 1 food
+    //an 1 con moi
     this.eatAudio.play();
     let newPart = new Vector(0,0);
     newPart.Assign(this.body[this.size()-1]);
@@ -100,15 +98,15 @@ class snake{
 
   handleBound() {
     if (this.body[0].x < 0){
-      this.body[0].x = gameSize/UNIT-1;
+      this.body[0].x = GAMESIZE/UNIT-1;
     }
-    if (this.body[0].x > gameSize/UNIT-1){
+    if (this.body[0].x > GAMESIZE/UNIT-1){
       this.body[0].x = 0;
     }
     if (this.body[0].y < 0){
-      this.body[0].y = gameSize/UNIT-1;
+      this.body[0].y = GAMESIZE/UNIT-1;
     }
-    if (this.body[0].y > gameSize/UNIT-1){
+    if (this.body[0].y > GAMESIZE/UNIT-1){
       this.body[0].y = 0;
     }
   }
@@ -124,7 +122,6 @@ class snake{
     }
     return false;
   }
-
 }
 
 class Food{
@@ -138,8 +135,8 @@ class Food{
   }
 
   getRandomPos() {
-    let x = Math.floor(Math.round(Math.random()*(gameSize/UNIT-1)));
-    let y = Math.floor(Math.round(Math.random()*(gameSize/UNIT-1)));
+    let x = Math.floor(Math.round(Math.random()*(GAMESIZE/UNIT-1)));
+    let y = Math.floor(Math.round(Math.random()*(GAMESIZE/UNIT-1)));
     return new Vector(x, y);
   }
 
@@ -154,8 +151,65 @@ class Food{
         }
       check = check==true?false:true;
     }
-    //this.pos.Assign(this.getRandomPos());
     this.draw();
+  }
+}
+
+class Game{
+  constructor() {
+    this.curLevel = 1;
+    this.player = new snake();
+    this.food = new Food(new Vector(5,5));
+    this.myInterval;
+    this.gameDelay = 400-this.curLevel*50;
+
+    playDialog.showModal();
+    this.drawBackgrAndSnake();
+  }
+
+  updateGameDelay() {
+    this.gameDelay = 400-this.curLevel*50;
+  }
+
+  run(){
+    playDialog.close();
+    this.setTimer();
+  }
+
+  drawBackgrAndSnake() {
+    //ve bang
+    ctx.fillStyle = BACKGROUND_COLOR;
+    ctx.fillRect(0, 0, GAMESIZE, GAMESIZE);
+
+    this.player.draw();
+    this.food.draw();
+  }
+
+  setTimer() {
+    //lap lai ham myTimer moi gameDelay thoi gian
+    this.myInterval = setInterval(myTimer, this.gameDelay);
+  }
+}
+
+function drawRectOnboard(vt, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
+  ctx.fillStyle = 'red';
+  ctx.strokeRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
+}
+
+function myTimer() {
+  game.player.move();
+  if (game.player.checkDead()) {
+    clearInterval(game.myInterval);
+    gameOverDialog.showModal();
+  }
+
+  if (game.player.checkEat(game.food)) {
+    game.player.update();
+    game.food.getNewFood(game.player.body);
+    game.player.playerScore += Math.round(game.curLevel);
+    document.getElementById("score").innerHTML = game.player.playerScore;
   }
 }
 
@@ -163,27 +217,27 @@ document.onkeydown = function(e) {
   switch (e.keyCode) {
 
     case LEFT:
-      if (player.curDirection.cmp(new Vector(1, 0)))
+      if (game.player.curDirection.cmp(new Vector(1, 0)))
         break;
-      player.curDirection = new Vector(-1, 0);
+      game.player.curDirection = new Vector(-1, 0);
       break;
 
     case UP:
-      if (player.curDirection.cmp(new Vector(0, 1)))
+      if (game.player.curDirection.cmp(new Vector(0, 1)))
         break;
-      player.curDirection = new Vector(0, -1);
+      game.player.curDirection = new Vector(0, -1);
       break;
 
     case RIGHT:
-      if (player.curDirection.cmp(new Vector(-1, 0)))
+      if (game.player.curDirection.cmp(new Vector(-1, 0)))
         break;
-      player.curDirection = new Vector(1, 0);
+      game.player.curDirection = new Vector(1, 0);
       break;
 
     case DOWN:
-      if (player.curDirection.cmp(new Vector(0, -1)))
+      if (game.player.curDirection.cmp(new Vector(0, -1)))
         break;
-      player.curDirection = new Vector(0, 1);
+      game.player.curDirection = new Vector(0, 1);
       break;
 
     default:
@@ -192,28 +246,28 @@ document.onkeydown = function(e) {
 }
 
 document.getElementById('upLevelBtn').onclick = function(){
-  if (maxLevel > curLevel) {
+  if (maxLevel > game.curLevel) {
     document.getElementById('level').innerHTML ++;
-    curLevel ++;
+    game.curLevel ++;
   }
-  gameDelay = 400 - curLevel*50;
+  game.updateGameDelay();
   
   if (document.getElementById('pauseBtn').innerHTML == "Pause"){
-    clearInterval(myInterval);
-    myInterval = setInterval(myTimer, gameDelay);
+    clearInterval(game.myInterval);
+    game.setTimer();
   }
 };
 
 document.getElementById('downLevelBtn').onclick = function(){
-  if (minLevel < curLevel) {
+  if (minLevel < game.curLevel) {
     document.getElementById('level').innerHTML --;
-    curLevel --;
+    game.curLevel --;
   }
-  gameDelay = 400 - curLevel*50;
+  game.updateGameDelay();
   
   if (document.getElementById('pauseBtn').innerHTML == "Pause"){
-    clearInterval(myInterval);
-    myInterval = setInterval(myTimer, gameDelay);
+    clearInterval(game.myInterval);
+    game.setTimer();
   }
 };
 
@@ -221,12 +275,12 @@ document.getElementById('pauseBtn').onclick = function(){
   let str = document.getElementById('pauseBtn').innerHTML;
 
   if (str == "Pause"){
-    clearInterval(myInterval);
+    clearInterval(game.myInterval);
     document.getElementById('pauseBtn').innerHTML = "Continue";
   }
   
   if (str == "Continue"){
-    myInterval = setInterval(myTimer, gameDelay);
+    game.setTimer();
     document.getElementById('pauseBtn').innerHTML = "Pause";
   }
 };
@@ -240,40 +294,7 @@ document.getElementById('endGameBtn').onclick = function(){
 };
 
 document.getElementById('playBtn').onclick = function(){
-  document.getElementById("playDialog").open = false;
+  game.run();
 };
 
-//ve bang
-ctx.fillStyle = BACKGROUND_COLOR;
-ctx.fillRect(0, 0, gameSize, gameSize);
-
-//ve hinh vuong len bang
-function drawRectOnboard(vt, color) {
-  ctx.fillStyle = color;
-  ctx.fillRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
-  ctx.fillStyle = 'red';
-  ctx.strokeRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
-}
-
-playDialog.showModal();
-
-var player = new snake();
-player.draw();
-var food = new Food(new Vector(5,5));
-food.draw();
-
-//vong lap de thuc hien lại ham myTimer
-var myInterval = setInterval(myTimer, gameDelay);
-function myTimer() {
-  player.move();
-  if (player.checkDead()) {
-    clearInterval(myInterval);
-    gameOverDialog.showModal();
-  }
-  if (player.checkEat(food)) {
-    player.update();
-    food.getNewFood(player.body);
-    player.playerScore += Math.round(curLevel);
-    document.getElementById("score").innerHTML = player.playerScore;
-  }
-}
+var game = new Game();

@@ -9,27 +9,14 @@ const SNAKE_COLOR = 'orange'
 const HEAD_COLOR = 'red';
 const FOOD_COLOR = 'blue'
 
-ctx.fillStyle = BACKGROUND_COLOR;
-ctx.fillRect(0, 0, gameSize, gameSize);
-
 var curLevel = document.getElementById("level").innerHTML;
 var maxLevel = 7, minLevel = 1;
 var gameDelay = 400-curLevel*50;
-
-let playerScore = 0;
 
 let LEFT = 37,
     UP = 38,
     RIGHT = 39,
     DOWN = 40;
-
-//ve hinh vuong len bang
-function drawRectOnboard(vt, color) {
-  ctx.fillStyle = color;
-  ctx.fillRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
-  ctx.fillStyle = 'red';
-  ctx.strokeRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
-}
 
 class Vector{
   constructor(x, y) {
@@ -65,6 +52,8 @@ class snake{
     this.head = this.body[0];
 
     this.curDirection = new Vector(1, 0);
+
+    this.playerScore = 0;
 
     this.eatAudio = new Audio("../Sound/Nope.mp3");
     this.sadAudio = new Audio("../Sound/sad.mp3");
@@ -170,44 +159,6 @@ class Food{
   }
 }
 
-
-let player = new snake();
-player.draw();
-let food = new Food(new Vector(5,5));
-food.draw();
-
-//vong lap de thuc hien lại ham myTimer
-var myInterval = setInterval(myTimer, gameDelay);
-
-function myTimer() {
-  player.move();
-  if (player.checkDead()) {
-    clearInterval(myInterval);
-    // document.getElementById("gameOverDialog").open = true;
-    alert("Game over!!!")
-    window.location.reload();
-  }
-  if (player.checkEat(food)) {
-    player.update();
-    food.getNewFood(player.body);
-    playerScore += Math.round(curLevel);
-    document.getElementById("score").innerHTML = playerScore;
-  }
-}
-
-// setInterval(() => {
-//   player.move();
-//   if (player.checkDead()) {
-//     alert("Thua!");
-//   }
-//   if (player.checkEat(food)) {
-//     player.update();
-//     food.getNewFood(player.body);
-//     playerScore += Math.round(curLevel);
-//     document.getElementById("score").innerHTML = playerScore;
-//   }
-// }, gameDelay);
-
 document.onkeydown = function(e) {
   switch (e.keyCode) {
 
@@ -279,6 +230,50 @@ document.getElementById('pauseBtn').onclick = function(){
     document.getElementById('pauseBtn').innerHTML = "Pause";
   }
 };
+
 document.getElementById('resetBtn').onclick = function(){
   window.location.reload();
 };
+
+document.getElementById('endGameBtn').onclick = function(){
+  window.location.reload();
+};
+
+document.getElementById('playBtn').onclick = function(){
+  document.getElementById("playDialog").open = false;
+};
+
+//ve bang
+ctx.fillStyle = BACKGROUND_COLOR;
+ctx.fillRect(0, 0, gameSize, gameSize);
+
+//ve hinh vuong len bang
+function drawRectOnboard(vt, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
+  ctx.fillStyle = 'red';
+  ctx.strokeRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
+}
+
+playDialog.showModal();
+
+var player = new snake();
+player.draw();
+var food = new Food(new Vector(5,5));
+food.draw();
+
+//vong lap de thuc hien lại ham myTimer
+var myInterval = setInterval(myTimer, gameDelay);
+function myTimer() {
+  player.move();
+  if (player.checkDead()) {
+    clearInterval(myInterval);
+    gameOverDialog.showModal();
+  }
+  if (player.checkEat(food)) {
+    player.update();
+    food.getNewFood(player.body);
+    player.playerScore += Math.round(curLevel);
+    document.getElementById("score").innerHTML = player.playerScore;
+  }
+}

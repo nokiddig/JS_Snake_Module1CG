@@ -90,17 +90,27 @@ p#level{
 }
 
 dialog {
-   position: absolute;
-   left: 0px;
-   right: 0px;
-   width: -webkit-fit-content;
-   height: -webkit-fit-content;
-   color: black;
+   width: 150px;
+   font-size: 40px;
    margin: auto;
-   border-width: initial;
-   border-style: solid;
-   border-color: initial;
-   border-image: initial;
-   padding: 1em;
+   padding: 0px 20px;
    background: white;
+   border: 8px solid firebrick;
+   border-radius: 5px;
+}
+#endGameBtn, #playBtn {
+   width: 60%;
+   display: inline-block;
+   background-color: coral;
+   font-size: 14px;
+   font-weight: bold;
+   cursor: pointer;
+   padding: 10px 5px;
+   margin: 0px 10px 10px 10px;
+   border-radius: 5px;
+   border: none;  
+}
+
+dialog p{
+   margin: 15px 10px 5px 10px;
 }

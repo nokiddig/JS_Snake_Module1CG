@@ -5,9 +5,9 @@ canvas.width = canvas.height = gameSize;
 const ctx = canvas.getContext('2d');
 
 const BACKGROUND_COLOR = 'black';
-const SNAKE_COLOR = 'white'
+const SNAKE_COLOR = 'orange'
 const HEAD_COLOR = 'red';
-
+const FOOD_COLOR = 'blue'
 
 ctx.fillStyle = BACKGROUND_COLOR;
 ctx.fillRect(0, 0, gameSize, gameSize);
@@ -22,11 +22,12 @@ let LEFT = 37,
     UP = 38,
     RIGHT = 39,
     DOWN = 40;
+
 //ve hinh vuong len bang
 function drawRectOnboard(vt, color) {
   ctx.fillStyle = color;
   ctx.fillRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
-  ctx.fillStyle = 'blue';
+  ctx.fillStyle = 'red';
   ctx.strokeRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
 }
 
@@ -58,12 +59,15 @@ class Vector{
 
 class snake{
   constructor() {
-    this.body = [new Vector(2, 3), 
-                new Vector(3, 3),
-                new Vector(4, 3)];
+    this.body = [new Vector(3, 0), 
+                new Vector(2, 0),
+                new Vector(1, 0)];
     this.head = this.body[0];
 
-    this.curDirection = new Vector(-1, 0);
+    this.curDirection = new Vector(1, 0);
+
+    this.eatAudio = new Audio("../Sound/Nope.mp3");
+    this.sadAudio = new Audio("../Sound/sad.mp3");
   }
 
   draw(){
@@ -95,6 +99,7 @@ class snake{
 
   update() {
     //an 1 food
+    this.eatAudio.play();
     let newPart = new Vector(0,0);
     newPart.Assign(this.body[this.size()-1]);
     newPart.Sub(this.body[this.size()-2]);
@@ -123,7 +128,10 @@ class snake{
     //true la chet, false la song
     for (let i=1; i<this.size(); i++) {
       if (this.body[0].cmp(this.body[i]))
+      {
+        this.sadAudio.play();
         return true;
+      }
     }
     return false;
   }
@@ -137,7 +145,7 @@ class Food{
   }
 
   draw() {
-    drawRectOnboard(this.pos, 'green');
+    drawRectOnboard(this.pos, FOOD_COLOR);
   }
 
   getRandomPos() {
@@ -168,13 +176,16 @@ player.draw();
 let food = new Food(new Vector(5,5));
 food.draw();
 
-//vong lap de ran di chuyen moi 200s
+//vong lap de thuc hien lại ham myTimer
 var myInterval = setInterval(myTimer, gameDelay);
 
 function myTimer() {
   player.move();
   if (player.checkDead()) {
     clearInterval(myInterval);
+    // document.getElementById("gameOverDialog").open = true;
+    alert("Game over!!!")
+    window.location.reload();
   }
   if (player.checkEat(food)) {
     player.update();
@@ -235,8 +246,11 @@ document.getElementById('upLevelBtn').onclick = function(){
     curLevel ++;
   }
   gameDelay = 400 - curLevel*50;
-  clearInterval(myInterval);
-  myInterval = setInterval(myTimer, gameDelay);;
+  
+  if (document.getElementById('pauseBtn').innerHTML == "Pause"){
+    clearInterval(myInterval);
+    myInterval = setInterval(myTimer, gameDelay);
+  }
 };
 
 document.getElementById('downLevelBtn').onclick = function(){
@@ -245,10 +259,26 @@ document.getElementById('downLevelBtn').onclick = function(){
     curLevel --;
   }
   gameDelay = 400 - curLevel*50;
-  clearInterval(myInterval);
-  myInterval = setInterval(myTimer, gameDelay);;
+  
+  if (document.getElementById('pauseBtn').innerHTML == "Pause"){
+    clearInterval(myInterval);
+    myInterval = setInterval(myTimer, gameDelay);
+  }
 };
 
-document.getElementById('exitBtn').onclick = function(){
+document.getElementById('pauseBtn').onclick = function(){
+  let str = document.getElementById('pauseBtn').innerHTML;
+
+  if (str == "Pause"){
+    clearInterval(myInterval);
+    document.getElementById('pauseBtn').innerHTML = "Continue";
+  }
   
+  if (str == "Continue"){
+    myInterval = setInterval(myTimer, gameDelay);
+    document.getElementById('pauseBtn').innerHTML = "Pause";
+  }
+};
+document.getElementById('resetBtn').onclick = function(){
+  window.location.reload();
 };

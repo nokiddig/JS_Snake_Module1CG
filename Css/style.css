@@ -1,5 +1,8 @@
 body{
    font-family: 'Courier New', Courier, monospace;
+   background-image: url("../Image/backgr3.jpg");
+   background-repeat: no-repeat;
+   background-size: cover;
 }
 
 canvas#gamezone {
@@ -14,26 +17,26 @@ canvas#gamezone {
 }
 
 .side-bar {
-   padding: 10px;
+   background-color: aliceblue;
    border: 5px solid chocolate; 
-   position: relative;
    display: flex;
    flex-direction: column;
    justify-content: space-between;
+   position: relative;
+   padding: 10px;
    margin: 0px 10px;
    border-radius: 5px;
 }
 
 h1{
+   color: brown;
    font-size: 50px;
    font-weight: bold;
-   color: brown;
    text-decoration: underline;
 }
 
 h2{
    font-size: 35px;
-   /* font-weight: bold; */
    color: brown;
 }
 
@@ -98,8 +101,9 @@ p#level{
    border: 8px solid firebrick;
    border-radius: 5px;
 }
+
 #playDialog {
-   width: 400px;
+   width: 500px;
    font-size: 40px;
    margin: auto;
    padding: 0px 20px;
@@ -111,7 +115,7 @@ p#level{
 #endGameBtn, #playBtn {
    width: 60%;
    display: inline-block;
-   background-color: coral;
+   background-color: chocolate;
    font-size: 14px;
    font-weight: bold;
    cursor: pointer;

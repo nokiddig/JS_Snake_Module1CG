@@ -11,6 +11,11 @@ const FOOD_COLOR = 'blue'
 
 var maxLevel = 7, minLevel = 1;
 
+var HIGH_SCORE = window.localStorage.getItem("highScore");
+if (HIGH_SCORE === undefined)
+  window.localStorage.setItem('highScore', '0');
+document.getElementById("highScore").innerHTML = HIGH_SCORE;
+
 let LEFT = 37,
     UP = 38,
     RIGHT = 39,
@@ -51,7 +56,7 @@ class snake{
 
     this.curDirection = new Vector(1, 0);
 
-    this.playerScore = 0;
+    this.snakeScore = 0;
 
     this.eatAudio = new Audio("../Sound/Nope.mp3");
     this.sadAudio = new Audio("../Sound/sad.mp3");
@@ -167,13 +172,9 @@ class Game{
     this.drawBackgrAndSnake();
   }
 
-  updateGameDelay() {
-    this.gameDelay = 400-this.curLevel*50;
-  }
-
   run(){
-    playDialog.close();
-    this.setTimer();
+      playDialog.close();
+      this.setTimer();
   }
 
   drawBackgrAndSnake() {
@@ -189,6 +190,11 @@ class Game{
     //lap lai ham myTimer moi gameDelay thoi gian
     this.myInterval = setInterval(myTimer, this.gameDelay);
   }
+
+  updateGameDelay() {
+    this.gameDelay = 400-this.curLevel*50;
+  }
+
 }
 
 function drawRectOnboard(vt, color) {
@@ -208,8 +214,14 @@ function myTimer() {
   if (game.player.checkEat(game.food)) {
     game.player.update();
     game.food.getNewFood(game.player.body);
-    game.player.playerScore += Math.round(game.curLevel);
-    document.getElementById("score").innerHTML = game.player.playerScore;
+    game.player.snakeScore += Math.round(game.curLevel);
+    document.getElementById("score").innerHTML = game.player.snakeScore;
+  }
+
+  if (game.player.snakeScore > parseInt(HIGH_SCORE)) {
+    document.getElementById("highScore").innerHTML = game.player.snakeScore;
+    HIGH_SCORE = game.player.snakeScore.toString();
+    window.localStorage.setItem('highScore', HIGH_SCORE.toString());
   }
 }
 

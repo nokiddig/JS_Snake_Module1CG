@@ -89,7 +89,7 @@ p#level{
    border: none;
 }
 
-dialog {
+#gameOverDialog {
    width: 150px;
    font-size: 40px;
    margin: auto;
@@ -98,6 +98,16 @@ dialog {
    border: 8px solid firebrick;
    border-radius: 5px;
 }
+#playDialog {
+   width: 400px;
+   font-size: 40px;
+   margin: auto;
+   padding: 0px 20px;
+   background: white;
+   border: 8px solid firebrick;
+   border-radius: 5px;
+}
+
 #endGameBtn, #playBtn {
    width: 60%;
    display: inline-block;

@@ -36,6 +36,7 @@ h1{
 }
 
 h2{
+   margin: 0px;
    font-size: 35px;
    color: brown;
 }
@@ -43,6 +44,7 @@ h2{
 p{
    font-size: 25px;
    color: darkred;
+   margin: 10px 5px 5px 5px;
 }
 
 p#level{
@@ -50,6 +52,11 @@ p#level{
    position: absolute;
    left: 130px;
    top: 400px; 
+}
+
+p#passwordHandle {
+   font-size: 15px;
+   font-style: italic;
 }
 
 #downLevelBtn {
@@ -93,11 +100,11 @@ p#level{
 }
 
 #gameOverDialog {
-   width: 150px;
-   font-size: 40px;
-   margin: auto;
+   width: 300px;
+   font-size: 20px;
    padding: 0px 20px;
-   background: white;
+   /* background: white; */
+   color: darkred;
    border: 8px solid firebrick;
    border-radius: 5px;
 }
@@ -113,14 +120,14 @@ p#level{
 }
 
 #endGameBtn, #playBtn {
-   width: 60%;
+   width: 40%;
    display: inline-block;
    background-color: chocolate;
    font-size: 14px;
    font-weight: bold;
    cursor: pointer;
    padding: 10px 5px;
-   margin: 0px 10px 10px 10px;
+   margin: 10px 10px 10px 10px;
    border-radius: 5px;
    border: none;  
 }

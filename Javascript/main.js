@@ -5,21 +5,19 @@ canvas.width = canvas.height = GAMESIZE;
 const ctx = canvas.getContext('2d');
 
 const BACKGROUND_COLOR = 'black';
-const SNAKE_COLOR = 'orange'
+const SNAKE_COLOR = 'orange';
 const HEAD_COLOR = 'red';
-const FOOD_COLOR = 'blue'
+const FOOD_COLOR = 'blue';
 
-var maxLevel = 7, minLevel = 1;
+const maxLevel = 7, minLevel = 1;
 
-var HIGH_SCORE = window.localStorage.getItem("highScore");
-if (HIGH_SCORE === undefined)
-  window.localStorage.setItem('highScore', '0');
-document.getElementById("highScore").innerHTML = HIGH_SCORE;
+var HIGH_SCORE = window.localStorage.getItem("highScore") || '0';
+var TOP_PLAYER = window.localStorage.getItem("topPlayer") || 'SyHehe';
 
-let LEFT = 37,
-    UP = 38,
-    RIGHT = 39,
-    DOWN = 40;
+const LEFT = 37,
+      UP = 38,
+      RIGHT = 39,
+      DOWN = 40;
 
 class Vector{
   constructor(x, y) {
@@ -89,8 +87,8 @@ class snake{
     return this.body[0].cmp(food.pos);
   }
 
-  update() {
-    //an 1 con moi
+  //an 1 con moi
+  eatAndUpdate() {
     this.eatAudio.play();
     let newPart = new Vector(0,0);
     newPart.Assign(this.body[this.size()-1]);
@@ -116,8 +114,8 @@ class snake{
     }
   }
 
+  //true la chet, false la song
   checkDead() {
-    //true la chet, false la song
     for (let i=1; i<this.size(); i++) {
       if (this.body[0].cmp(this.body[i]))
       {
@@ -167,18 +165,31 @@ class Game{
     this.food = new Food(new Vector(5,5));
     this.myInterval;
     this.gameDelay = 400-this.curLevel*50;
+    this.playerName = "";
 
     playDialog.showModal();
-    this.drawBackgrAndSnake();
+    this.drawBoardAndSnake();
+    this.showScoreAndTop();
   }
 
-  run(){
+  run() {
       playDialog.close();
       this.setTimer();
   }
 
-  drawBackgrAndSnake() {
-    //ve bang
+  showScoreAndTop() {
+    if (parseInt(HIGH_SCORE) == NaN) {
+      HIGH_SCORE = '0';
+    }
+    if (typeof TOP_PLAYER !== 'string') {
+      TOP_PLAYER = 'NONE';
+    }
+    document.getElementById("highScore").innerHTML = HIGH_SCORE;
+    document.getElementById("topPlayer").innerHTML = TOP_PLAYER;
+  }
+
+  //ve bang
+  drawBoardAndSnake() {
     ctx.fillStyle = BACKGROUND_COLOR;
     ctx.fillRect(0, 0, GAMESIZE, GAMESIZE);
 
@@ -186,8 +197,8 @@ class Game{
     this.food.draw();
   }
 
+  //lap lai ham myTimer moi gameDelay thoi gian
   setTimer() {
-    //lap lai ham myTimer moi gameDelay thoi gian
     this.myInterval = setInterval(myTimer, this.gameDelay);
   }
 
@@ -200,7 +211,9 @@ class Game{
 function drawRectOnboard(vt, color) {
   ctx.fillStyle = color;
   ctx.fillRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
-  ctx.fillStyle = 'red';
+  
+  ctx.lineJoin = "round";	
+  ctx.strokeStyle = BACKGROUND_COLOR;
   ctx.strokeRect(vt.x*UNIT, vt.y*UNIT, UNIT, UNIT);
 }
 
@@ -212,7 +225,7 @@ function myTimer() {
   }
 
   if (game.player.checkEat(game.food)) {
-    game.player.update();
+    game.player.eatAndUpdate();
     game.food.getNewFood(game.player.body);
     game.player.snakeScore += Math.round(game.curLevel);
     document.getElementById("score").innerHTML = game.player.snakeScore;
@@ -302,7 +315,16 @@ document.getElementById('resetBtn').onclick = function(){
 };
 
 document.getElementById('endGameBtn').onclick = function(){
-  window.location.reload();
+  game.playerName = document.getElementById("gameoverInput").value;
+  let regullar = /^\w{3,10}$/g;
+  if(regullar.test(game.playerName)) {
+    if (game.player.snakeScore == HIGH_SCORE)
+      window.localStorage.setItem('topPlayer', game.playerName);
+    window.location.reload();
+  }
+  else {
+    document.getElementById("passwordHandle").innerHTML = "*Use 3-10 characters, no symbol or space.";
+  }
 };
 
 document.getElementById('playBtn').onclick = function(){

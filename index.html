@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <title>Snake</title>
+  <link rel="icon" href="Image/icon.jpg">
+  
   <link rel="stylesheet" href="Css/style.css">
 </head>
 
@@ -15,11 +19,12 @@
     <div class="side-bar">
       <div>
         <H1>Snake</H1>
-        <P>Score: <span id="score">0</span></P>
+        <P>Your score: <span id="score">0</span></P>
         <p>High score: <span id="highScore">0</span></p>
+        <p>Top: <span id="topPlayer">LeVanSy</span></p>
       </div>
       
-      <div>
+      <div id="gameLevel">
         <h2>Level</h2>
         <button id="downLevelBtn">-</button>
         <p id="level">1</p>
@@ -34,17 +39,23 @@
 
     <dialog id="gameOverDialog">
       <p>Gameover!</p> 
+      <form id="gameOverForm" action="">
+        Your name:
+        <input id="gameoverInput" type="text" placeholder="Ex: LeVanSy" size="12"> 
+        <p id="passwordHandle"></p>
+      </form>
       <button id="endGameBtn">New game!</button>
     </dialog>
 
     <dialog id="playDialog">
       <p>
-        - Press key(up/down/left/right) to move snake. <br>
-        - Eat food to get point. <br>
-        - Have 7 levels from 1 to 7. <br>
+        - Press key(up/down/left/right) to move snake.<br>
+        - Eat food to get point.<br>
+        - Have 7 levels from 1 to 7.<br>
       </p>
       <button id="playBtn">PLAY</button>
     </dialog>
+
   </div>
   
   <script src="Javascript/main.js"></script>

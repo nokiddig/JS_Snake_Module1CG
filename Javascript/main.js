@@ -1,18 +1,17 @@
 const GAMESIZE = 600;
 const UNIT = 40;
-const canvas = document.getElementById("canvas");
-canvas.width = canvas.height = GAMESIZE;
-const ctx = canvas.getContext('2d');
-
 const BACKGROUND_COLOR = 'black';
 const SNAKE_COLOR = 'orange';
 const HEAD_COLOR = 'red';
 const FOOD_COLOR = 'blue';
+const canvas = document.getElementById("canvas");
+canvas.width = canvas.height = GAMESIZE;
+const ctx = canvas.getContext('2d');
 
 const maxLevel = 7, minLevel = 1;
 
-var HIGH_SCORE = window.localStorage.getItem("highScore") || '0';
-var TOP_PLAYER = window.localStorage.getItem("topPlayer") || 'SyHehe';
+let HIGH_SCORE = window.localStorage.getItem("highScore") || '0';
+let TOP_PLAYER = window.localStorage.getItem("topPlayer") || 'SyHehe';
 
 const LEFT = 37,
       UP = 38,
@@ -49,29 +48,30 @@ function myTimer() {
   }
 }
 
+// ========= event =============== 
 document.onkeydown = function(e) {
   switch (e.keyCode) {
 
     case LEFT:
-      if (game.player.curDirection.cmp(new Vector(1, 0)))
+      if (game.player.curDirection.compare(new Vector(1, 0)))
         break;
       game.player.curDirection = new Vector(-1, 0);
       break;
 
     case UP:
-      if (game.player.curDirection.cmp(new Vector(0, 1)))
+      if (game.player.curDirection.compare(new Vector(0, 1)))
         break;
       game.player.curDirection = new Vector(0, -1);
       break;
 
     case RIGHT:
-      if (game.player.curDirection.cmp(new Vector(-1, 0)))
+      if (game.player.curDirection.compare(new Vector(-1, 0)))
         break;
       game.player.curDirection = new Vector(1, 0);
       break;
 
     case DOWN:
-      if (game.player.curDirection.cmp(new Vector(0, -1)))
+      if (game.player.curDirection.compare(new Vector(0, -1)))
         break;
       game.player.curDirection = new Vector(0, 1);
       break;
@@ -142,5 +142,6 @@ document.getElementById('endGameBtn').onclick = function() {
 document.getElementById('playBtn').onclick = function() {
   game.run();
 };
+// ===============================
 
 var game = new Game();

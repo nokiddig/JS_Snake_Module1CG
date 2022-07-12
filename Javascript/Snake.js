@@ -1,4 +1,4 @@
-class snake {
+class Snake {
   constructor() {
     this.body = [new Vector(3, 0), 
                 new Vector(2, 0),
@@ -13,7 +13,7 @@ class snake {
   }
 
   draw() {
-    for (let i=1; i<this.body.length; i++) {
+    for (let i = 1; i < this.body.length; i++) {
       drawRectOnboard(this.body[i], SNAKE_COLOR);
     }
     drawRectOnboard(this.body[0], HEAD_COLOR);
@@ -25,8 +25,8 @@ class snake {
   
   move () {
     drawRectOnboard(this.body[this.size()-1], BACKGROUND_COLOR);
-    for (let i = this.body.length-1; i>0; i--) {
-      this.body[i].Assign(this.body[i-1]);
+    for (let i = this.body.length-1; i > 0; i--) {
+      this.body[i].assign(this.body[i-1]);
     }
     this.body[0].add(this.curDirection);
 
@@ -34,17 +34,16 @@ class snake {
     this.draw();
   }
 
-  //true khi dau con ran cham thuc an
   checkEat(food) {
-    return this.body[0].cmp(food.pos);
+    return this.body[0].compare(food.pos);
   }
 
   //an 1 con moi
   eatAndUpdate() {
     this.eatAudio.play();
     let newPart = new Vector(0,0);
-    newPart.Assign(this.body[this.size()-1]);
-    newPart.Sub(this.body[this.size()-2]);
+    newPart.assign(this.body[this.size()-1]);
+    newPart.sub(this.body[this.size()-2]);
     newPart.add(this.body[this.size()-1]);
 
     this.body.push(newPart);
@@ -67,10 +66,9 @@ class snake {
     }
   }
 
-  //true la chet, false la song
   checkDead() {
-    for (let i=1; i<this.size(); i++) {
-      if (this.body[0].cmp(this.body[i])) {
+    for (let i = 1; i < this.size(); i++) {
+      if (this.body[0].compare(this.body[i])) {
         this.sadAudio.play();
         return true;
       }

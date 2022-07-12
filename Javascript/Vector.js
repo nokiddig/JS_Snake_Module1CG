@@ -9,17 +9,17 @@ class Vector {
     this.y += vt2.y;
   }
 
-  Sub(vt2) {
+  sub(vt2) {
     this.x -= vt2.x;
     this.y -= vt2.y;
   }
 
-  Assign(vt2) {
+  assign(vt2) {
     this.x = vt2.x;
     this.y = vt2.y;
   }
 
-  cmp(vt2) {
+  compare(vt2) {
     return (this.x == vt2.x && this.y == vt2.y);
   }
 }

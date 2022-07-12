@@ -1,7 +1,7 @@
 class Food {
   constructor(vt2) {
     this.pos = new Vector();
-    this.pos.Assign(vt2);
+    this.pos.assign(vt2);
   }
 
   draw() {
@@ -16,14 +16,14 @@ class Food {
 
   getNewFood(arr) {
     let check = false;
-    while(check==false){
-      this.pos.Assign(this.getRandomPos());
-      for (let i=0; i<arr.length; i++)
-        if (this.pos.cmp(arr[i])) {
+    while(check == false){
+      this.pos.assign(this.getRandomPos());
+      for (let i = 0; i < arr.length; i++)
+        if (this.pos.compare(arr[i])) {
           check = true;
           break;
         }
-      check = check==true?false:true;
+      check = check == true ? false : true;
     }
     this.draw();
   }

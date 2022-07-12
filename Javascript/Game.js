@@ -1,10 +1,10 @@
 class Game {
   constructor() {
     this.curLevel = 1;
-    this.player = new snake();
+    this.player = new Snake();
     this.food = new Food(new Vector(5,5));
     this.myInterval;
-    this.gameDelay = 400-this.curLevel*50;
+    this.gameDelay = 400 - this.curLevel * 50;
     this.playerName = "";
 
     playDialog.showModal();
@@ -28,7 +28,6 @@ class Game {
     document.getElementById("topPlayer").innerHTML = TOP_PLAYER;
   }
 
-  //ve bang
   drawBoardAndSnake() {
     ctx.fillStyle = BACKGROUND_COLOR;
     ctx.fillRect(0, 0, GAMESIZE, GAMESIZE);
@@ -43,6 +42,6 @@ class Game {
   }
 
   updateGameDelay() {
-    this.gameDelay = 400-this.curLevel*50;
+    this.gameDelay = 400 - this.curLevel * 50;
   }
 }

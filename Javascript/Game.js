@@ -4,7 +4,7 @@ class Game {
     this.player = new Snake();
     this.food = new Food(new Vector(5,5));
     this.myInterval;
-    this.gameDelay = 400 - this.curLevel * 50;
+    this.gameDelay = 300 - this.curLevel * 35;
     this.playerName = "";
 
     playDialog.showModal();
@@ -42,6 +42,6 @@ class Game {
   }
 
   updateGameDelay() {
-    this.gameDelay = 400 - this.curLevel * 50;
+    this.gameDelay = 300 - this.curLevel * 35;
   }
 }

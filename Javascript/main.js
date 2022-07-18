@@ -4,6 +4,7 @@ const BACKGROUND_COLOR = 'black';
 const SNAKE_COLOR = 'orange';
 const HEAD_COLOR = 'red';
 const FOOD_COLOR = 'blue';
+
 const canvas = document.getElementById("canvas");
 canvas.width = canvas.height = GAMESIZE;
 const ctx = canvas.getContext('2d');
@@ -13,10 +14,7 @@ const maxLevel = 7, minLevel = 1;
 let HIGH_SCORE = window.localStorage.getItem("highScore") || '0';
 let TOP_PLAYER = window.localStorage.getItem("topPlayer") || 'SyHehe';
 
-const LEFT = 37,
-      UP = 38,
-      RIGHT = 39,
-      DOWN = 40;
+const [LEFT, UP, RIGHT, DOWN] = [37, 38, 39, 40];
 
 function drawRectOnboard(vt, color) {
   ctx.fillStyle = color;
